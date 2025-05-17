@@ -2,6 +2,15 @@
 
 @import 'tailwindcss';
 
+@tailwindcss preflight;
+@tailwindcss components;
+@tailwindcss utilities;
+
+@theme {
+  --color-primary: #2b85ff;
+  --color-secondary: #EF863E;
+}
+
 @layer base {
   html {
     font-family: 'Poppins', 'sans-serif';
@@ -10,5 +19,15 @@
   body {
     background-color: #fdfeff;
     overflow: hidden;
+  }
+}
+
+@layer components {
+  .input-box {
+    @apply w-full text-sm bg-transparent border-2 border-gray-300 px-5 py-3 rounded mb-4 outline-none;
+  }
+
+  .btn-primary {
+    @apply w-full text-sm bg-primary text-white p-2 rounded my-1 hover:bg-blue-600;
   }
 }
