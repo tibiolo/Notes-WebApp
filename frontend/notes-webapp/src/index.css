@@ -8,7 +8,7 @@
 
 @theme {
   --color-primary: #2b85ff;
-  --color-secondary: #EF863E;
+  --color-secondary: #ef863e;
 }
 
 @layer base {
@@ -29,5 +29,9 @@
 
   .btn-primary {
     @apply w-full text-sm bg-primary text-white p-2 rounded my-1 hover:bg-blue-600;
+  }
+
+  .icon-btn {
+    @apply text-xl text-slate-500 cursor-pointer hover:text-primary;
   }
 }
