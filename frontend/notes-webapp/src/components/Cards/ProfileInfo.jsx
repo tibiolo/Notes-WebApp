@@ -10,7 +10,7 @@ const ProfileInfo = (props) => {
       <div className="">
         <p className="text-sm font-medium">Maks</p>
         <button
-          className="text-sm text-slate-700 underline"
+          className="text-sm text-slate-700 underline cursor-pointer"
           onClick={props.onLogout}
         >
           Logout
