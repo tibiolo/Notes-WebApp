@@ -2,22 +2,105 @@
 import pool from './config/db.js';
 
 // Getting notes by user id
-const getNotes = async (user_id) => {
-  const result = await pool.query(`SELECT * FROM notes WHERE user_id == $1`, [
-    user_id,
-  ]);
+export const getNotes = async (user_id) => {
+  const result = await pool.query(
+    `SELECT n.note_id,n.title, n.context, n.pinned, n.created_at,
+      json_agg(t.name) AS tags FROM notes n LEFT JOIN note_tags nt ON n.note_id = nt.note_id LEFT JOIN tags t ON nt.tag_id = t.tag_id WHERE n.user_id = $1 GROUP BY n.note_id `,
+    [user_id]
+  );
   return result.rows[0];
 };
 
 // Saving notes
-const saveNote = async (user_id, title, context, pinned) => {
-  const result = await pool.query(
-    `INSERT INTO notes (user_id, title, context, pinned)`,
-    [user_id, title, context, pinned]
-  );
+export const saveNote = async (user_id, title, context, pinned, tags = []) => {
+  const client = await pool.connect();
+
+  try {
+    await client.query('BEGIN');
+
+    const notesRes = await client.query(
+      `INSERT INTO notes (user_id, title, context, pinned) VALUES ($1, $2 , $3, $4) RETURNING note_id`,
+      [user_id, title, context, pinned]
+    );
+
+    const note_id = notesRes.rows[0].note_id;
+
+    for (const tagName of tags) {
+      const tagRes = await client.query(
+        `INSERT INTO tags (name) VALUES ($1) ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name RETURNING tag_id`,
+        [tagName]
+      );
+
+      const tag_id = tagRes.rows[0].tag_id;
+
+      await client.query(
+        `INSERT INTO note_tags (note_id, tag_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
+        [note_id, tag_id]
+      );
+    }
+
+    await client.query(`COMMIT`);
+    return { note_id };
+  } catch (err) {
+    await client.query(`ROLLBACK`);
+    throw err;
+  } finally {
+    client.release();
+  }
 };
 
-module.exports = {
-  getNotes,
-  saveNote,
+// Pinning notes
+export const updatePinNote = async (user_id, note_id, pinned) => {
+  const result = await pool.query(
+    `UPDATE notes SET pinned = $1 WHERE note_id = $2 AND user_id = $3 RETURNING pinned`,
+    [pinned, note_id, user_id]
+  );
+  return result.rows[0];
+};
+
+// Edit notes
+export const editNote = async (user_id, note_id, title, context, tags = []) => {
+  const client = await pool.connect();
+
+  try {
+    await client.query(`BEGIN`);
+
+    await client.query(
+      `UPDATE notes SET title = $1, context = $2, WHERE note_id = $3 AND user_id = $4`,
+      [title, context, note_id, user_id]
+    );
+
+    await client.query(`DELETE FROM note_tags WHERE note_id = $1`, [note_id]);
+
+    for (const tagName of tags) {
+      const tagRes = await client.query(
+        `INSERT INTO tags (name) VALUES ($1) ON CONFLICT DO UPDATE SET name = EXCLUDED.name RETURNING tag_id`,
+        [tagName]
+      );
+
+      const tag_id = tagRes.rows[0].tag_id;
+
+      await client.query(
+        `INSERT INTO note_tags (note_id, tag_id) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
+        [note_id, tag_id]
+      );
+    }
+
+    await client.query(`COMMIT`);
+    return { note_id, title, context, tags };
+  } catch (error) {
+    await client.query(`ROLLBACK`);
+    throw err;
+  } finally {
+    client.release();
+  }
+};
+
+// Delete notes
+export const deleteNote = async (user_id, note_id) => {
+  const result = await pool.query(
+    `DELETE FROM notes WHERE note_id = $1 AND user_id = $2 RETURNING *`,
+    [note_id, user_id]
+  );
+  return result.rows[0];
 };
