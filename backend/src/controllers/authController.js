@@ -22,7 +22,7 @@ export const loginUser = async (req, res) => {
     }
 
     const payload = {
-      userId: user.id,
+      user_id: user.user_id,
       email: user.email,
     };
 
@@ -31,7 +31,7 @@ export const loginUser = async (req, res) => {
     res.status(200).json({
       message: 'Login successful',
       token,
-      user: { id: user.id, email: user.email, username: user.username },
+      user: { id: user.user_id, email: user.email, username: user.username },
     });
   } catch (err) {
     console.error(err);
