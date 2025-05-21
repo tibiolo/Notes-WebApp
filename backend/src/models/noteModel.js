@@ -1,5 +1,5 @@
 // Importing PostgreSQL connection pool
-import pool from './config/db.js';
+import pool from '../config/db.js';
 
 // Getting notes by user id
 export const getNotes = async (user_id) => {
@@ -8,7 +8,7 @@ export const getNotes = async (user_id) => {
       json_agg(t.name) AS tags FROM notes n LEFT JOIN note_tags nt ON n.note_id = nt.note_id LEFT JOIN tags t ON nt.tag_id = t.tag_id WHERE n.user_id = $1 GROUP BY n.note_id `,
     [user_id]
   );
-  return result.rows[0];
+  return result.rows;
 };
 
 // Saving notes
@@ -66,7 +66,7 @@ export const editNote = async (user_id, note_id, title, context, tags = []) => {
     await client.query(`BEGIN`);
 
     await client.query(
-      `UPDATE notes SET title = $1, context = $2, WHERE note_id = $3 AND user_id = $4`,
+      `UPDATE notes SET title = $1, context = $2 WHERE note_id = $3 AND user_id = $4`,
       [title, context, note_id, user_id]
     );
 
@@ -88,7 +88,7 @@ export const editNote = async (user_id, note_id, title, context, tags = []) => {
 
     await client.query(`COMMIT`);
     return { note_id, title, context, tags };
-  } catch (error) {
+  } catch (err) {
     await client.query(`ROLLBACK`);
     throw err;
   } finally {
