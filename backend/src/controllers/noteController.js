@@ -32,3 +32,17 @@ export const createNote = async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 };
+
+export const updateNotePin = async (req, res) => {
+  const { note_id, pinned } = req.body;
+  const user_id = req.user.user_id;
+
+  try {
+    const result = await updatePinNote(user_id, note_id, pinned);
+
+    return res.json(result);
+  } catch (err) {
+    console.error('Error editing note', err);
+    res.status(500).json('Server error');
+  }
+};

@@ -1,8 +1,13 @@
 import express from 'express';
 import { verifyToken } from '../middleware/authMiddleware.js';
-import { fetchNotes, createNote } from '../controllers/noteController.js';
+import {
+  fetchNotes,
+  createNote,
+  updateNotePin,
+} from '../controllers/noteController.js';
 import {
   validateNote,
+  validatePin,
   handleValidation,
 } from '../middleware/noteValidation.js';
 
@@ -19,5 +24,14 @@ router.get('/notes', verifyToken, fetchNotes);
 
 // Setting up saving notes
 router.post('/notes', verifyToken, validateNote, handleValidation, createNote);
+
+// Setting up pinnging notes
+router.patch(
+  '/notes',
+  verifyToken,
+  validatePin,
+  handleValidation,
+  updateNotePin
+);
 
 export default router;

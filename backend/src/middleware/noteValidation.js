@@ -25,6 +25,10 @@ export const validateNote = [
   body('user_id').not().exists().withMessage('Cannot manually set user_id'),
 ];
 
+export const validatePin = [
+  body('pinned').isBoolean().withMessage('Pinned must be true or false'),
+];
+
 export const handleValidation = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
