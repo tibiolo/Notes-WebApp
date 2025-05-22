@@ -4,7 +4,6 @@ import {
   authValidation,
   handleValidation,
 } from '../middleware/authValidation.js';
-import { verifyToken } from '../middleware/authMiddleware.js';
 
 // Initializing express router
 const router = express.Router();
