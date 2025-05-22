@@ -74,7 +74,7 @@ export const editNote = async (user_id, note_id, title, context, tags = []) => {
 
     for (const tagName of tags) {
       const tagRes = await client.query(
-        `INSERT INTO tags (name) VALUES ($1) ON CONFLICT DO UPDATE SET name = EXCLUDED.name RETURNING tag_id`,
+        `INSERT INTO tags (name) VALUES ($1) ON CONFLICT (name) DO UPDATE SET name = EXCLUDED.name RETURNING tag_id`,
         [tagName]
       );
 
