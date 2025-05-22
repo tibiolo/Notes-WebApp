@@ -5,7 +5,6 @@ import PasswordInput from '../../components/Input/PasswordInput';
 import { validateEmail } from '../../utils/validator';
 
 const Login = () => {
-
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -51,6 +50,7 @@ const Login = () => {
             <input
               name={'email'}
               type="text"
+              autoComplete="email"
               placeholder="Email"
               className="input-box"
               value={formData.email}

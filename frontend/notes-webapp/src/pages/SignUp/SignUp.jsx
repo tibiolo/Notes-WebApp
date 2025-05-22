@@ -66,6 +66,7 @@ const SignUp = () => {
             <input
               name="name"
               type="text"
+              autoComplete="name"
               placeholder="Name"
               className="input-box"
               value={formData.name}
@@ -74,6 +75,7 @@ const SignUp = () => {
             <input
               name="email"
               type="text"
+              autoComplete="email"
               placeholder="Email"
               className="input-box"
               value={formData.email}
