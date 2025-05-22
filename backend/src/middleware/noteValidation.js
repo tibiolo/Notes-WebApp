@@ -13,8 +13,6 @@ export const validateNote = [
     .isLength({ min: 1 })
     .withMessage('Context is required'),
 
-  body('pinned').isBoolean().withMessage('Pinned must be true or false'),
-
   body('tags')
     .optional()
     .isArray({ max: 5 })
@@ -27,6 +25,10 @@ export const validateNote = [
 
 export const validatePin = [
   body('pinned').isBoolean().withMessage('Pinned must be true or false'),
+];
+
+export const validateNoteId = [
+  body('note_id').isNumeric().withMessage('note_id needs to be a number'),
 ];
 
 export const handleValidation = (req, res, next) => {
