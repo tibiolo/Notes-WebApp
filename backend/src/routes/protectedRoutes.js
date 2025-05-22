@@ -18,8 +18,8 @@ import {
 const router = express.Router();
 
 // Setting up a login user route
-router.get('/dashboard', verifyToken, (req, res) => {
-  res.json({ message: `Hello ${req.user.email}, you're authenitcated!` });
+router.get('/auth', verifyToken, (req, res) => {
+  res.json({ message: `Authenticated, ${req.user.email}` });
 });
 
 // Setting up get notes route
