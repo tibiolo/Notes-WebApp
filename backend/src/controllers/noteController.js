@@ -6,7 +6,7 @@ import {
   updatePinNote,
 } from '../models/noteModel.js';
 
-export const fetchNotes = async (req, res) => {
+export const fetchNotesControl = async (req, res) => {
   const user_id = req.user.user_id;
 
   try {
@@ -19,7 +19,7 @@ export const fetchNotes = async (req, res) => {
   }
 };
 
-export const createNote = async (req, res) => {
+export const createNoteControl = async (req, res) => {
   const { title, context, pinned, tags } = req.body;
   const user_id = req.user.user_id;
 
@@ -33,7 +33,7 @@ export const createNote = async (req, res) => {
   }
 };
 
-export const updateNotePin = async (req, res) => {
+export const updateNotePinControl = async (req, res) => {
   const { note_id, pinned } = req.body;
   const user_id = req.user.user_id;
 
@@ -43,6 +43,35 @@ export const updateNotePin = async (req, res) => {
     return res.json(result);
   } catch (err) {
     console.error('Error editing note', err);
+    res.status(500).json('Server error');
+  }
+};
+
+export const editNoteControl = async (req, res) => {
+  const { note_id, title, context, tags } = req.body;
+  const user_id = req.user.user_id;
+
+  try {
+    const result = await editNote(user_id, note_id, title, context, tags);
+
+    return res.json(result);
+  } catch (err) {
+    console.error('Error editing note', err);
+    res.status(500).json('Server error');
+  }
+};
+
+export const deleteNoteControl = async (req, res) => {
+  const note_id = parseInt(req.body.note_id);
+
+  const user_id = req.user.user_id;
+
+  try {
+    const result = await deleteNote(user_id, note_id);
+
+    res.json(result);
+  } catch (err) {
+    console.error('Error deleting note', err);
     res.status(500).json('Server error');
   }
 };
