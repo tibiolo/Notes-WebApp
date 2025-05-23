@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import Navbar from '../../components/Navbar/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PasswordInput from '../../components/Input/PasswordInput';
 import { validateEmail } from '../../utils/validator';
+import axios from '../../utils/axios.js';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+
+  const navigate = useNavigate();
 
   const [error, setError] = useState(null);
 
@@ -37,6 +40,14 @@ const Login = () => {
     setError('');
 
     // (API CALL)
+
+    try {
+      const response = await axios.post('/api/users/login', formData);
+      navigate('/dashboard');
+    } catch (err) {
+      console.error('Error Logging in', err);
+      setError('Login failed');
+    }
   };
 
   return (
