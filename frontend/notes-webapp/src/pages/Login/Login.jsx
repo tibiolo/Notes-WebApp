@@ -52,7 +52,7 @@ const Login = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar showSearchAndUser={false} />
 
       <div className="flex items-center justify-center mt-28">
         <div className="w-96 border-2 border-gray-300 rounded bg-white px-7 py-10">
