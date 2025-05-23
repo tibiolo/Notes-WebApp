@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from '../../utils/axios.js';
 import Modal from 'react-modal';
 import Navbar from '../../components/Navbar/Navbar';
 import NoteCard from '../../components/Cards/NoteCard';
@@ -12,22 +13,47 @@ const Home = () => {
     data: null,
   });
 
+  const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    const fetchNotes = async () => {
+      try {
+        const response = await axios.get('api/users/notes');
+
+        setNotes(response.data);
+      } catch (err) {
+        console.error('Error fetching notes: ', err);
+      }
+    };
+
+    fetchNotes();
+  }, []);
+
   return (
     <>
       <Navbar />
 
       <div className="container mx-auto p-5">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
-          <NoteCard
-            title={'Clean the house'}
-            date={'2nd Jan 2025'}
-            content={'Remember to clean the house before leaving for holiday'}
-            tags={'#Chore'}
-            isPinned={true}
-            onEdit={() => {}}
-            onDelete={() => {}}
-            onPinNote={() => {}}
-          />
+          {notes.map((note) => (
+            <NoteCard
+              key={note.note_id}
+              title={note.title}
+              date={new Date(note.created_at).toLocaleDateString()}
+              content={note.context}
+              tags={note.tags}
+              isPinned={note.pinned}
+              onEdit={() => {
+                setOpenAddEditNotes({
+                  isShown: true,
+                  type: 'edit',
+                  data: note,
+                });
+              }}
+              onDelete={() => {}}
+              onPinNote={() => {}}
+            />
+          ))}
         </div>
       </div>
 
