@@ -17,7 +17,7 @@ import {
 // Initializing express router
 const router = express.Router();
 
-// Setting up a login user route
+// Setting up a authenticate user route
 router.get('/auth', verifyToken, (req, res) => {
   res.json({ message: `Authenticated, ${req.user.email}` });
 });

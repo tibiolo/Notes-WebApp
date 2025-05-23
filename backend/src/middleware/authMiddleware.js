@@ -7,10 +7,8 @@ export const verifyToken = (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
-    res.status(401).json({ message: 'No token provided' });
+    return res.status(401).json({ message: 'No token provided' });
   }
-
-  console.log(token);
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
