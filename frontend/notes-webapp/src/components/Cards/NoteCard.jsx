@@ -21,7 +21,9 @@ const NoteCard = (props) => {
       </p>
 
       <div className="flex items-center justify-between mt-2">
-        <div className="text-xs text-slate-500">{props.tags}</div>
+        <div className="text-xs text-slate-500">
+          {props.tags.map((tag) => `#${tag} `)}
+        </div>
 
         <div className="flex items-center gap-2">
           <MdCreate
