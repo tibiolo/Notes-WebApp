@@ -46,7 +46,7 @@ const Login = () => {
       navigate('/dashboard');
     } catch (err) {
       console.error('Error Logging in', err);
-      setError('Login failed');
+      setError('Login failed, Try Again.');
     }
   };
 
