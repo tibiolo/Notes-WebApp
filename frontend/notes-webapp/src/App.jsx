@@ -8,6 +8,14 @@ import SignUp from './pages/SignUp/SignUp';
 const routes = (
   <Router>
     <Routes>
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<SignUp />} />
       <Route
