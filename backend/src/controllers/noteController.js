@@ -48,11 +48,11 @@ export const updateNotePinControl = async (req, res) => {
 };
 
 export const editNoteControl = async (req, res) => {
-  const { note_id, title, context, tags } = req.body;
+  const { note_id, title, content, tags } = req.body;
   const user_id = req.user.user_id;
 
   try {
-    const result = await editNote(user_id, note_id, title, context, tags);
+    const result = await editNote(user_id, note_id, title, content, tags);
 
     return res.json(result);
   } catch (err) {
