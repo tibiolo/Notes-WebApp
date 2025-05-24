@@ -14,6 +14,7 @@ const Home = () => {
   });
 
   const [notes, setNotes] = useState([]);
+  const [username, setUsername] = useState('');
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -26,12 +27,25 @@ const Home = () => {
       }
     };
 
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get('api/users/auth');
+        console.log(response.data.username);
+        setUsername(response.data.username);
+      } catch (err) {
+        console.error('Error fetching user: ', err);
+      }
+    };
+
     fetchNotes();
+    fetchUser();
   }, []);
+
+  console.log(username);
 
   return (
     <>
-      <Navbar showSearchAndUser={true} />
+      <Navbar showSearchAndUser={true} username={username} />
 
       <div className="container mx-auto p-5">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">

@@ -41,7 +41,9 @@ const Navbar = (props) => {
         />
       )}
 
-      {props.showSearchAndUser && <ProfileInfo onLogout={onLogout} />}
+      {props.showSearchAndUser && (
+        <ProfileInfo onLogout={onLogout} username={props.username} />
+      )}
     </div>
   );
 };
