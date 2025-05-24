@@ -1,9 +1,12 @@
 import React from 'react';
+import Modal from 'react-modal';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import SignUp from './pages/SignUp/SignUp';
+
+Modal.setAppElement('#root');
 
 const routes = (
   <Router>
