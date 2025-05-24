@@ -16,17 +16,17 @@ const Home = () => {
   const [notes, setNotes] = useState([]);
   const [username, setUsername] = useState('');
 
+  const fetchNotes = async () => {
+    try {
+      const response = await axios.get('api/users/notes');
+
+      setNotes(response.data);
+    } catch (err) {
+      console.error('Error fetching notes: ', err);
+    }
+  };
+
   useEffect(() => {
-    const fetchNotes = async () => {
-      try {
-        const response = await axios.get('api/users/notes');
-
-        setNotes(response.data);
-      } catch (err) {
-        console.error('Error fetching notes: ', err);
-      }
-    };
-
     const fetchUser = async () => {
       try {
         const response = await axios.get('api/users/auth');
@@ -39,6 +39,20 @@ const Home = () => {
     fetchNotes();
     fetchUser();
   }, []);
+
+  const handlePin = async (note) => {
+    const { note_id, pinned } = note;
+
+    try {
+      const response = await axios.patch('/api/users/notes', {
+        note_id,
+        pinned: !pinned,
+      });
+      fetchNotes();
+    } catch (err) {
+      console.error('Error updating note pin: ', err);
+    }
+  };
 
   return (
     <>
@@ -62,7 +76,9 @@ const Home = () => {
                 });
               }}
               onDelete={() => {}}
-              onPinNote={() => {}}
+              onPinNote={() => {
+                handlePin(note);
+              }}
             />
           ))}
         </div>
