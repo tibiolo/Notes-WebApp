@@ -30,7 +30,6 @@ const Home = () => {
     const fetchUser = async () => {
       try {
         const response = await axios.get('api/users/auth');
-        console.log(response.data.username);
         setUsername(response.data.username);
       } catch (err) {
         console.error('Error fetching user: ', err);
@@ -40,8 +39,6 @@ const Home = () => {
     fetchNotes();
     fetchUser();
   }, []);
-
-  console.log(username);
 
   return (
     <>
