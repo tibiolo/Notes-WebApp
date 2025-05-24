@@ -1,16 +1,48 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TagInput from '../../components/Input/TagInput';
 import { MdClose } from 'react-icons/md';
+import axios from '../../utils/axios.js';
 
-const AddEditNotes = ({ noteData, type, onClose }) => {
+// { fetchNotes, noteData, type, onClose }
+
+const AddEditNotes = (props) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState([]);
 
   const [error, setError] = useState(null);
 
-  const addNewNote = async () => {};
-  const editNote = async () => {};
+  const addNewNote = async () => {
+    try {
+      await axios.post('/api/users/notes', {
+        title,
+        content,
+        pinned: false,
+        tags,
+      });
+      props.fetchNotes();
+      props.onClose();
+    } catch (err) {
+      console.error('Error adding new note: ', err);
+      setError('Error adding note, Please try again.');
+    }
+  };
+
+  const editNote = async () => {
+    try {
+      await axios.patch('/api/users/notes/edit', {
+        note_id: props.noteData.note_id,
+        title,
+        content,
+        tags,
+      });
+      props.fetchNotes();
+      props.onClose();
+    } catch (err) {
+      console.error('Error editing note: ', err);
+      setError('Error editing note, Please try again.');
+    }
+  };
 
   const handleAddNote = () => {
     if (!title) {
@@ -25,18 +57,31 @@ const AddEditNotes = ({ noteData, type, onClose }) => {
 
     setError('');
 
-    if (type === 'edit') {
+    if (props.type === 'edit') {
       editNote();
     } else {
       addNewNote();
     }
   };
 
+  useEffect(() => {
+    if (props.type === 'edit' && props.noteData) {
+      setTitle(props.noteData.title || '');
+      setContent(props.noteData.content || '');
+
+      setTags(
+        Array.isArray(props.noteData.tags)
+          ? props.noteData.tags.filter((tag) => tag && tag.trim() !== '')
+          : []
+      );
+    }
+  }, [props.title, props.noteData]);
+
   return (
     <div className="relative">
       <button
         className="w-10 h-10 rounded-full flex items-center justify-center absolute -top-3 -right-3 hover:bg-slate-300 cursor-pointer"
-        onClick={onClose}
+        onClick={props.onClose}
       >
         <MdClose className="text-xl text-slate-800" />
       </button>
@@ -79,7 +124,7 @@ const AddEditNotes = ({ noteData, type, onClose }) => {
         className="btn-primary font-medium mt-5 p-3 cursor-pointer"
         onClick={handleAddNote}
       >
-        Add
+        {props.type === 'edit' ? 'Edit' : 'Add'}
       </button>
     </div>
   );

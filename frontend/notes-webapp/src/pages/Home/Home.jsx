@@ -65,7 +65,7 @@ const Home = () => {
               key={note.note_id}
               title={note.title}
               date={new Date(note.created_at).toLocaleDateString()}
-              content={note.context}
+              content={note.content}
               tags={note.tags}
               isPinned={note.pinned}
               onEdit={() => {
@@ -103,6 +103,9 @@ const Home = () => {
         <AddEditNotes
           type={openAddEditNotes.type}
           noteData={openAddEditNotes.data}
+          fetchNotes={() => {
+            fetchNotes();
+          }}
           onClose={() => {
             setOpenAddEditNotes({ isShown: false, type: 'add', data: null });
           }}
