@@ -22,7 +22,9 @@ const NoteCard = (props) => {
 
       <div className="flex items-center justify-between mt-2">
         <div className="text-xs text-slate-500">
-          {props.tags.map((tag) => `#${tag} `)}
+          {props.tags
+            .filter((tag) => tag !== null && tag !== undefined)
+            .map((tag) => `#${tag} `)}
         </div>
 
         <div className="flex items-center gap-2">
