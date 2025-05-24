@@ -20,10 +20,17 @@ export const registerValidation = [
     .withMessage('Password is required')
     .isLength({ min: 6 })
     .withMessage('Password must be at least 6 characters long'),
+
+  body('confirmPassword')
+    .notEmpty()
+    .withMessage('Password is required')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters long'),
 ];
 
 export const handleValidation = (req, res, next) => {
   const errors = validationResult(req);
+  console.log("userVAL Reached")
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
