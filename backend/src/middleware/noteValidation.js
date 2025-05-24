@@ -7,11 +7,11 @@ export const validateNote = [
     .isLength({ min: 1, max: 255 })
     .withMessage('Title must be between 1 and 255 characters'),
 
-  body('context')
+  body('content')
     .trim()
     .escape()
     .isLength({ min: 1 })
-    .withMessage('Context is required'),
+    .withMessage('Content is required'),
 
   body('tags')
     .optional()

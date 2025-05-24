@@ -20,11 +20,11 @@ export const fetchNotesControl = async (req, res) => {
 };
 
 export const createNoteControl = async (req, res) => {
-  const { title, context, pinned, tags } = req.body;
+  const { title, content, pinned, tags } = req.body;
   const user_id = req.user.user_id;
 
   try {
-    const result = await saveNote(user_id, title, context, pinned, tags);
+    const result = await saveNote(user_id, title, content, pinned, tags);
 
     return res.json(result);
   } catch (err) {

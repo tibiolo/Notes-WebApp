@@ -12,7 +12,7 @@ export const getNotes = async (user_id) => {
 };
 
 // Saving notes
-export const saveNote = async (user_id, title, context, pinned, tags = []) => {
+export const saveNote = async (user_id, title, content, pinned, tags = []) => {
   const client = await pool.connect();
 
   try {
@@ -20,7 +20,7 @@ export const saveNote = async (user_id, title, context, pinned, tags = []) => {
 
     const notesRes = await client.query(
       `INSERT INTO notes (user_id, title, context, pinned) VALUES ($1, $2 , $3, $4) RETURNING note_id`,
-      [user_id, title, context, pinned]
+      [user_id, title, content, pinned]
     );
 
     const note_id = notesRes.rows[0].note_id;
