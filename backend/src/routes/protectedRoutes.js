@@ -19,7 +19,10 @@ const router = express.Router();
 
 // Setting up a authenticate user route
 router.get('/auth', verifyToken, (req, res) => {
-  res.json({ message: `Authenticated, ${req.user.email}` });
+  res.json({
+    message: `Authenticated, ${req.user.email}`,
+    username: req.user.username,
+  });
 });
 
 // Setting up get notes route
