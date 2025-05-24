@@ -41,16 +41,17 @@ const SignUp = () => {
 
     if (!formData.password) {
       setError('Please enter a valid password.');
-      return error;
+      return;
     }
 
     if (!formData.confirmPassword) {
       setError('Please enter a valid password confirmation.');
-      return error;
+      return;
     }
 
     if (formData.password != formData.confirmPassword) {
       setError('Passwords do not match!');
+      return;
     }
 
     setError('');
