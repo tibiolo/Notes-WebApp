@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import axios from '../../utils/axios.js';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar/Navbar';
 import PasswordInput from '../../components/Input/PasswordInput';
 import { validateEmail } from '../../utils/validator';
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -23,10 +24,12 @@ const SignUp = () => {
 
   const [error, setError] = useState(null);
 
+  const navigate = useNavigate();
+
   const handleSignUp = async (e) => {
     e.preventDefault();
 
-    if (!formData.name) {
+    if (!formData.username) {
       setError('Please enter your name');
       return;
     }
@@ -53,6 +56,14 @@ const SignUp = () => {
     setError('');
 
     // (API CALL)
+
+    try {
+      await axios.post('/api/users/register', formData);
+      navigate('/login');
+    } catch (err) {
+      console.error('Error - SignUp Failed: ', err);
+      setError('SignUp Failed, Try Again.');
+    }
   };
 
   return (
@@ -64,12 +75,12 @@ const SignUp = () => {
           <form onSubmit={handleSignUp}>
             <h4 className="text-2xl mb-7">SignUp</h4>
             <input
-              name="name"
+              name="username"
               type="text"
-              autoComplete="name"
-              placeholder="Name"
+              autoComplete="username"
+              placeholder="Username"
               className="input-box"
-              value={formData.name}
+              value={formData.username}
               onChange={handleChange}
             />
             <input
