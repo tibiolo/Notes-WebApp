@@ -28,7 +28,7 @@ export const validatePin = [
 ];
 
 export const validateNoteId = [
-  body('note_id').isNumeric().withMessage('note_id needs to be a number'),
+  body('note_id').isInt().withMessage('note_id needs to be a number'),
 ];
 
 export const handleValidation = (req, res, next) => {
