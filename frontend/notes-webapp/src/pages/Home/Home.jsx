@@ -26,19 +26,16 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get('api/users/auth');
-        setUsername(response.data.username);
-      } catch (err) {
-        console.error('Error fetching user: ', err);
-      }
-    };
+  const deleteNotes = async (note) => {
+    const { note_id } = note;
 
-    fetchNotes();
-    fetchUser();
-  }, []);
+    try {
+      await axios.delete('/api/users/notes', { data: { note_id } });
+      fetchNotes();
+    } catch (err) {
+      console.log('Error deleting note: ', err);
+    }
+  };
 
   const handlePin = async (note) => {
     const { note_id, pinned } = note;
@@ -53,6 +50,20 @@ const Home = () => {
       console.error('Error updating note pin: ', err);
     }
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get('api/users/auth');
+        setUsername(response.data.username);
+      } catch (err) {
+        console.error('Error fetching user: ', err);
+      }
+    };
+
+    fetchNotes();
+    fetchUser();
+  }, []);
 
   return (
     <>
@@ -75,7 +86,9 @@ const Home = () => {
                   data: note,
                 });
               }}
-              onDelete={() => {}}
+              onDelete={() => {
+                deleteNotes(note);
+              }}
               onPinNote={() => {
                 handlePin(note);
               }}
