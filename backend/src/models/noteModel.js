@@ -104,3 +104,12 @@ export const deleteNote = async (user_id, note_id) => {
   );
   return result.rows[0];
 };
+
+// Search notes
+export const searchNotes = async (user_id, query) => {
+  const result = await pool.query(
+    `SELECT * FROM notes WHERE (title ILIKE $1 OR content ILIKE $1) AND user_id = $2`,
+    [query, user_id]
+  );
+  return result.rows[0];
+};
