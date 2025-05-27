@@ -106,10 +106,10 @@ export const deleteNote = async (user_id, note_id) => {
 };
 
 // Search notes
-export const searchNotes = async (user_id, query) => {
+export const searchNote = async (user_id, query) => {
   const result = await pool.query(
-    `SELECT * FROM notes WHERE (title ILIKE $1 OR content ILIKE $1) AND user_id = $2`,
-    [query, user_id]
+    `SELECT * FROM notes WHERE (title ILIKE $1 OR content ILIKE $1) AND user_id = $2 ORDER BY created_at DESC`,
+    [`%${query.trim()}%`, user_id]
   );
-  return result.rows[0];
+  return result.rows;
 };

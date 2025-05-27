@@ -4,6 +4,7 @@ import {
   editNote,
   deleteNote,
   updatePinNote,
+  searchNote,
 } from '../models/noteModel.js';
 
 export const fetchNotesControl = async (req, res) => {
@@ -72,6 +73,21 @@ export const deleteNoteControl = async (req, res) => {
     res.json(result);
   } catch (err) {
     console.error('Error deleting note', err);
+    res.status(500).json('Server error');
+  }
+};
+
+export const searchNoteControl = async (req, res) => {
+  const { query } = req.body;
+
+  const user_id = req.user.user_id;
+
+  try {
+    const result = await searchNote(user_id, query);
+
+    res.json(result);
+  } catch (err) {
+    console.log('Error searching notes: ', err);
     res.status(500).json('Server error');
   }
 };

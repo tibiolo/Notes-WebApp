@@ -6,12 +6,14 @@ import {
   updateNotePinControl,
   createNoteControl,
   fetchNotesControl,
+  searchNoteControl,
 } from '../controllers/noteController.js';
 import {
   validateNote,
   validatePin,
   handleValidation,
   validateNoteId,
+  validateNoteSearch,
 } from '../middleware/noteValidation.js';
 
 // Initializing express router
@@ -35,6 +37,15 @@ router.post(
   validateNote,
   handleValidation,
   createNoteControl
+);
+
+// Searching for notes route
+router.post(
+  '/notes/search',
+  verifyToken,
+  validateNoteSearch,
+  handleValidation,
+  searchNoteControl
 );
 
 // Setting up pining notes

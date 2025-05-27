@@ -31,6 +31,14 @@ export const validateNoteId = [
   body('note_id').isInt().withMessage('note_id needs to be a number'),
 ];
 
+export const validateNoteSearch = [
+  body('query')
+    .trim()
+    .escape()
+    .isLength({ min: 1, max: 255 })
+    .withMessage('query is required'),
+];
+
 export const handleValidation = (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
