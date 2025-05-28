@@ -18,7 +18,19 @@ const Navbar = (props) => {
     }
   };
 
-  const handleSearch = () => {};
+  const handleSearch = async () => {
+    try {
+      const response = await axios.post('/api/users/notes/search', {
+        query: searchQuery,
+      });
+
+      const searchedNotes = response.data;
+
+      props.displaySearchedNotes(searchedNotes);
+    } catch (err) {
+      console.log('Error searching for notes: ', err);
+    }
+  };
 
   const onSearch = (e) => {
     setSearchQuery(e.target.value);

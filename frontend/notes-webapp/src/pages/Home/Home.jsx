@@ -26,6 +26,10 @@ const Home = () => {
     }
   };
 
+  const displaySearchedNotes = async (searchedNotes) => {
+    setNotes(searchedNotes);
+  };
+
   const deleteNotes = async (note) => {
     const { note_id } = note;
 
@@ -67,7 +71,11 @@ const Home = () => {
 
   return (
     <>
-      <Navbar showSearchAndUser={true} username={username} />
+      <Navbar
+        showSearchAndUser={true}
+        username={username}
+        displaySearchedNotes={displaySearchedNotes}
+      />
 
       <div className="container mx-auto p-5">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
