@@ -108,8 +108,19 @@ export const deleteNote = async (user_id, note_id) => {
 // Search notes
 export const searchNote = async (user_id, query) => {
   const result = await pool.query(
-    `SELECT * FROM notes WHERE (title ILIKE $1 OR content ILIKE $1) AND user_id = $2 ORDER BY created_at DESC`,
-    [`%${query.trim()}%`, user_id]
+    `SELECT n.note_id, n.title, n.content, n.pinned, n.created_at,
+      json_agg(t.name) AS tags
+     FROM notes n
+     LEFT JOIN note_tags nt ON n.note_id = nt.note_id
+     LEFT JOIN tags t ON nt.tag_id = t.tag_id
+     WHERE n.user_id = $1 AND (
+       n.title ILIKE $2 OR
+       n.content ILIKE $2 OR
+       t.name ILIKE $2
+     )
+     GROUP BY n.note_id
+     ORDER BY n.created_at DESC`,
+    [user_id, `%${query.trim()}%`]
   );
   return result.rows;
 };
