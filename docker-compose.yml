@@ -4,7 +4,7 @@ services:
   backend:
     build: ./backend
     ports:
-      - '5000:5000'
+      - '3000:3000'
     env_file:
       - ./backend/.env
     volumes:
@@ -12,7 +12,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    build: ./frontend
+    build: ./frontend/notes-webapp
     ports:
       - '5173:5173'
     depends_on:
