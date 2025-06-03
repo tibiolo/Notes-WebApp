@@ -1,19 +1,44 @@
-version: '3.8'
-
 services:
+  # Database container init
+  db:
+    image: postgres:17.5
+    container_name: postgres_db
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - '${DB_PORT}:${DB_PORT}'
+
+  # Backend container init
+
   backend:
     build: ./backend
     ports:
-      - '3000:3000'
+      - '${BACKEND_PORT}:${BACKEND_PORT}'
     env_file:
-      - ./backend/.env
+      - ./.env
     volumes:
       - ./backend:/app
     restart: unless-stopped
+    depends_on:
+      - db
+
+    # Frontend container init
 
   frontend:
     build: ./frontend/notes-webapp
     ports:
-      - '5173:5173'
+      - '${FRONTEND_PORT}:${FRONTEND_PORT}'
     depends_on:
       - backend
+
+# Volumes
+volumes:
+  postgres_data:
