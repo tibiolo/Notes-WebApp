@@ -20,7 +20,7 @@ const Home = () => {
     try {
       const response = await axios.get('api/users/notes');
 
-      setNotes(response.data);
+      setNotes(response.data.sort((a, b) => b.pinned - a.pinned));
     } catch (err) {
       console.error('Error fetching notes: ', err);
     }
@@ -45,11 +45,18 @@ const Home = () => {
     const { note_id, pinned } = note;
 
     try {
-      const response = await axios.patch('/api/users/notes', {
+      await axios.patch('/api/users/notes', {
         note_id,
         pinned: !pinned,
       });
-      fetchNotes();
+
+      setNotes((prevNotes) => {
+        const updatedNotes = prevNotes.map((n) =>
+          n.note_id === note_id ? { ...n, pinned: !pinned } : n
+        );
+
+        return updatedNotes.sort((a, b) => b.pinned - a.pinned);
+      });
     } catch (err) {
       console.error('Error updating note pin: ', err);
     }
