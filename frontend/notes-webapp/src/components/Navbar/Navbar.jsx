@@ -38,6 +38,7 @@ const Navbar = (props) => {
 
   const onClearSearch = () => {
     setSearchQuery('');
+    props.fetchNotes();
   };
 
   return (

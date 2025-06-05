@@ -82,6 +82,7 @@ const Home = () => {
         showSearchAndUser={true}
         username={username}
         displaySearchedNotes={displaySearchedNotes}
+        fetchNotes={fetchNotes}
       />
 
       <div className="container mx-auto p-5">
