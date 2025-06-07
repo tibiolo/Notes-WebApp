@@ -19,25 +19,30 @@ services:
   # Backend container init
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    restart: unless-stopped
+    depends_on:
+      - db
     ports:
       - '${BACKEND_PORT}:${BACKEND_PORT}'
     env_file:
       - ./.env
-    volumes:
-      - ./backend:/app
-    restart: unless-stopped
-    depends_on:
-      - db
 
     # Frontend container init
 
   frontend:
-    build: ./frontend/notes-webapp
-    ports:
-      - '${FRONTEND_PORT}:${FRONTEND_PORT}'
+    build:
+      context: ./frontend/notes-webapp
+      dockerfile: Dockerfile
+    container_name: frontend
+    restart: unless-stopped
     depends_on:
       - backend
+    ports:
+      - '${FRONTEND_PORT}:${FRONTEND_PORT}'
 
 # Volumes
 volumes:
