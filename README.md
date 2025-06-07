@@ -36,7 +36,7 @@ A full-stack note-taking web application built with **React (Vite)** on the fron
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/notes-webapp.git
+git clone https://github.com/tibiolo/notes-webapp.git
 cd notes-webapp
 ```
 
